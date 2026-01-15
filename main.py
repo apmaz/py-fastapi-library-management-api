@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 import crud
 import schemas
-from crud import get_authors_list
 from database import get_db, Base, engine
 
 app = FastAPI()
@@ -17,7 +16,7 @@ def read_authors(
         limit: int = 4
 ):
 
-    return get_authors_list(db=db, skip=skip, limit=limit)
+    return crud.get_authors_list(db=db, skip=skip, limit=limit)
 
 
 @app.get("/authors/{author_id}/", response_model=schemas.Author)
