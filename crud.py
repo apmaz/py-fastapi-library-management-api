@@ -4,8 +4,11 @@ import schemas
 from models import DBAuthor, DBBook
 
 
-def get_authors_list(db: Session):
-    return db.query(DBAuthor).all()
+def get_authors_list(
+        db: Session,
+        skip: int | None = None,
+        limit: int | None = None):
+    return db.query(DBAuthor).offset(skip).limit(limit).all()
 
 
 def get_author(db: Session, author_id: int):
@@ -31,14 +34,16 @@ def create_author(db: Session, author: schemas.AuthorCreate):
 def get_books_list(
         db: Session,
         author_id: int | None = None,
+        skip: int | None = None,
+        limit: int | None = None,
 ):
 
-    queryset = db.query(DBBook).all()
+    queryset = db.query(DBBook)
 
     if author_id:
-        queryset = db.query(DBBook).filter(DBBook.author_id == author_id)
+        queryset = queryset.filter(DBBook.author_id == author_id)
 
-    return queryset
+    return queryset.offset(skip).limit(limit).all()
 
 
 def create_book(db: Session, book: schemas.BookCreate):

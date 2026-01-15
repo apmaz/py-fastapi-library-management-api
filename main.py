@@ -4,11 +4,11 @@ from sqlalchemy.orm import Session
 import crud
 import schemas
 from crud import get_authors_list
-from database import get_db
-
+from database import get_db, Base, engine
 
 app = FastAPI()
 
+Base.metadata.create_all(bind=engine)
 
 @app.get("/authors/", response_model=list[schemas.Author])
 def read_authors(
@@ -17,7 +17,7 @@ def read_authors(
         limit: int = 4
 ):
 
-    return get_authors_list(db)[skip:skip+limit]
+    return get_authors_list(db=db, skip=skip, limit=limit)
 
 
 @app.get("/authors/{author_id}/", response_model=schemas.Author)
@@ -53,7 +53,7 @@ def read_books(
         limit: int = 4
 ):
 
-    return crud.get_books_list(db=db, author_id=author_id)[skip:skip+limit]
+    return crud.get_books_list(db=db, author_id=author_id, skip=skip, limit=limit)
 
 
 @app.post("/books/", response_model=schemas.Book)

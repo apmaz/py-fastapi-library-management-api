@@ -16,7 +16,7 @@ class Author(AuthorBase):
     id: int
 
     class Config:
-        form_attributes = True
+        from_attributes = True
 
 
 class BookBase(BaseModel):
@@ -34,4 +34,4 @@ class Book(BookBase):
     author: Author
 
     class Config:
-        form_attributes = True
+        from_attributes = True
